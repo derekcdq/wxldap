@@ -1,7 +1,7 @@
 {
   "ldapConfig": {
       "ldapHost": "172.20.11.7:389",
-      "rootDn" : "cn=root,dc=eclincloud,dc=net",
-      "password" : "yilinyun#2020"
+      "rootDn" : "cn=root,dc=examle,dc=net",
+      "password" : "youerpassword"
   }
 }
