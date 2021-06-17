@@ -1,0 +1,7 @@
+{
+  "smtpConfig" : {
+    "mailHost": "smtp.exmail.qq.com",
+    "mailUser"  : "admin@eclincloud.com",
+    "password" : "CpBK2JYQoYGziAC2"
+  }
+}

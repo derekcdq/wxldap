@@ -1,0 +1,1 @@
+{"touser": "{userId}","toparty": "","totag": "","msgtype": "text","agentid": 1000010,"text": {"content":"{msgContent}"},"safe": 0,"enable_id_trans": 0,"enable_duplicate_check": 0}

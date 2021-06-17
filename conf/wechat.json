@@ -1,0 +1,8 @@
+{
+  "wechatConfig": {
+    "apiUrl": "https://qyapi.weixin.qq.com/cgi-bin/",
+    "corpId": "ww005ac0169593b2e1",
+    "corpSecret": "8bKdWuA09Y1cTm4koCzUDhGWXl0vQpi5YV1MnHqo9zQ",
+    "interval": 30
+  }
+}

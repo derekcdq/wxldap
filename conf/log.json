@@ -1,0 +1,24 @@
+{
+  "TimeFormat":"2006-01-02 15:04:05",
+  "Console": {
+    "level": "TRAC",
+    "color": true
+  },
+  "File": {
+    "filename": "./logs/wx2openldap.log",
+    "level": "TRAC",
+    "daily": true,
+    "maxlines": 1000000,
+    "maxsize": 1,
+    "maxdays": -1,
+    "append": true,
+    "permit": "0660"
+  },
+  "Conn": {
+    "net":"tcp",
+    "addr":"10.1.55.10:1024",
+    "level": "Warn",
+    "reconnect":true,
+    "reconnectOnMsg":false
+  }
+}
