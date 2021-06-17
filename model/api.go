@@ -8,8 +8,6 @@ import (
 	"time"
 )
 
-
-
 func CallWechatApi (method string) []byte {
 	url := wxConfig.ApiUrl + method
 	var resp *http.Response

@@ -23,6 +23,7 @@ type LdapConfig struct {
 	LdapHost string
 	RootDn string
 	Password string
+	DefaultPassword string
 }
 
 type SmtpConfig struct {
@@ -71,6 +72,7 @@ func ( t *LdapConfig ) Init () interface{} {
 	t.LdapHost = config.Get("ldapConfig > ldapHost").(string)
 	t.RootDn = config.Get("ldapConfig > rootDn").(string)
 	t.Password = config.Get("ldapConfig > password").(string)
+	t.DefaultPassword = config.Get("ldapConfig > defaultPassword").(string)
 	return t
 }
 

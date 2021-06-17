@@ -89,6 +89,7 @@ func SyncAllDept () {
 	}
 	logger.Info("开始同步部门及组...")
 	for _, v := range deptList.Department {
+		logger.Info("开始同步:",v.Name)
 		d := DeptInfo{}
 		d.AddToLdap(v.Name, v.DN)
 		u := new (UserList)

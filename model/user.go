@@ -85,7 +85,7 @@ func ( t *UserInfo ) GetUidNumber () interface{} {
 func ( t *UserInfo) AddToLdap ( userName string, userID string, userEmail string, userDn string ) interface{} {
 	t.CheckExist(userID)
 	if t.LdapExist == 1 {
-		logger.Info("用户已存在:" + userDn)
+		//logger.Info("用户已存在:" + userDn)
 		return t
 	}
 	t.GetUidNumber()
@@ -94,7 +94,7 @@ func ( t *UserInfo) AddToLdap ( userName string, userID string, userEmail string
 	sql.Attribute("sn", []string{userName})
 	sql.Attribute("cn", []string{userName})
 	sql.Attribute("uid", []string{userID})
-	sql.Attribute("userPassword", []string{"ecc123456"})
+	sql.Attribute("userPassword", []string{ldapConfig.DefaultPassword})
 	sql.Attribute("uidnumber", []string{t.UidNumber})
 	sql.Attribute("gidNumber", []string{"500"})
 	sql.Attribute("homedirectory", []string{"/home/users/" + userID})
