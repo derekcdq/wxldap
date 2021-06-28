@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/wonderivan/logger"
+	"net/http"
 	"os"
 	"os/exec"
 	"os/signal"
@@ -15,6 +16,7 @@ func init() {
 	model.InitConfig()
 	new(model.WechatToken).Init()
 	model.InitLdap()
+	model.InitDmap()
 }
 
 func main() {
@@ -55,13 +57,16 @@ func main() {
 	//同步部门及部门下人员
 	go func() {
 		for {
+			model.InitDmap()
 			model.SyncAllDept()
 			time.Sleep(time.Duration(30) * time.Second)
 		}
 	}()
-    //保证进程不退出
+	//CALLBACK监听
 	for {
-		time.Sleep(time.Second * 1000)
+		time.Sleep(10 * time.Second)
+		http.HandleFunc("/", model.IndexHandler)
+		http.ListenAndServe("0.0.0.0:8888",nil)
 	}
 
 }

@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/sbzhu/weworkapi_golang/wxbizmsgcrypt"
+	"github.com/wonderivan/logger"
 	"io/ioutil"
 	"net/http"
 )
@@ -20,27 +21,28 @@ type MsgContent struct {
 }
 
 
-func IndexHandler( w http.ResponseWriter, r *http.Request) {
-	wxcpt := wxbizmsgcrypt.NewWXBizMsgCrypt(callbackConfig.Token, callbackConfig.EncodingAeskey, callbackConfig.ReceiverId, wxbizmsgcrypt.XmlType)
+func IndexHandler ( w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
+	wxcpt := wxbizmsgcrypt.NewWXBizMsgCrypt(callbackConfig.Token, callbackConfig.EncodingAeskey, callbackConfig.ReceiverId, wxbizmsgcrypt.XmlType)
 	msgSignature := r.Form.Get("msg_signature")
 	timestamp := r.Form.Get("timestamp")
 	nonce     := r.Form.Get("nonce")
 	s, _ := ioutil.ReadAll(r.Body)
-	fmt.Println(msgSignature,timestamp,nonce)
 	msg, cryptErr := wxcpt.DecryptMsg(msgSignature, timestamp, nonce, s)
+	fmt.Println(string(msg))
 	if cryptErr != nil {
 		fmt.Println(cryptErr)
 	}
 	var m MsgContent
-	fmt.Println(string(msg))
 	xml.Unmarshal(msg,&m)
-	fmt.Println(m.ToUsername,m.Content,m.MsgType,m.Msgid,m.ChangeType)
-	deptInfo := new(DeptInfo)
-	deptInfo.ChangeDn("ou=公共账号,dc=eclincloud,dc=net","ou=公共账号1,dc=eclincloud,dc=net")
-	fmt.Println(deptInfo.DN)
-
+	changeType := m.ChangeType
+	logger.Info(m)
+	switch  changeType {
+	case "update_user":
+		fmt.Println("updateUserDept")
+	}
 }
+
 
 
 

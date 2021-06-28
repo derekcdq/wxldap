@@ -51,7 +51,7 @@ func  ( t *UserInfo ) Read ( body []byte ) interface{} {
 
 func ( t *UserInfo ) CheckExist ( userID string ) interface{} {
 	filter := "(&(" + "uid=" + userID + "))"
-	sql := ldap.NewSearchRequest("dc=eclincloud,dc=net", ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false,
+	sql := ldap.NewSearchRequest(ldapConfig.BaseDn, ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false,
 		filter, []string{"dn", "cn", "uid"}, nil)
 	sr, _ := ldapConn.Search(sql)
 	if len(sr.Entries) > 0 {
@@ -63,7 +63,7 @@ func ( t *UserInfo ) CheckExist ( userID string ) interface{} {
 }
 
 func ( t *UserInfo ) GetUidNumber () interface{} {
-	uidSql := ldap.NewSearchRequest("dc=eclincloud,dc=net", 3, 0, 0, 0, false,
+	uidSql := ldap.NewSearchRequest(ldapConfig.BaseDn, 3, 0, 0, 0, false,
 		"(&(objectClass=posixAccount))", []string{"uidNumber", "dn"}, nil)
 	sr, err := ldapConn.Search(uidSql)
 	if err != nil {
@@ -111,6 +111,8 @@ func ( t *UserInfo) AddToLdap ( userName string, userID string, userEmail string
 	}
 	return t
 }
+
+
 
 func SyncAllUser(userList []UserInfo, dn string) {
 	if len(userList) < 1 {
