@@ -2,13 +2,13 @@
 
 echo "开始检查需要的依赖包...."
 
-for i in `grep -E "github.com|golang.org" model/*.go|awk '{print $2 }'|sed s/\"//g`
+for i in `grep -E "github.com|golang.org" model/*.go|awk '{print $2 }'|sed s/\"//g|sort -u`
 do
         echo "开始安装 $i"
         go get $i
 done
 
-for i in `grep "github.com" main.go|sed s/\"//g`
+for i in `grep "github.com" main.go|sed s/\"//g|sort -u`
 do
         echo "开始安装 $i"
         go get $i
