@@ -53,13 +53,13 @@ func IndexHandler ( w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateParty (deptID int, rDn string) {
-	InitDmap()
 	dn := Dmap.Multiple[deptID]["dn"] + "," + Dmap.Multiple[deptID]["pdn"]
 	rDn = "ou=" + rDn
 	newSup :=  Dmap.Multiple[deptID]["pdn"]
 	d := new(DeptInfo)
 	d.ChangeDn(dn,rDn,newSup)
 	logger.Info("部门名称变更成功，新名称为:",d.DN)
+	InitDmap()
 }
 
 
