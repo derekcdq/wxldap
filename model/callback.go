@@ -43,7 +43,7 @@ func IndexHandler ( w http.ResponseWriter, r *http.Request) {
 		fmt.Println("updateUserDept")
 	case "update_party":
 		fmt.Println("updateparty")
-		if m.Id != "" && m.Name != "" {
+		if  m.Name != "" {
 			UpdateParty(m.Id,m.Name)
 		}
 	default:
