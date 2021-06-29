@@ -53,6 +53,7 @@ func IndexHandler ( w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateParty (deptID int, rDn string) {
+	InitDmap()
 	dn := Dmap.Multiple[deptID]["dn"] + "," + Dmap.Multiple[deptID]["pdn"]
 	rDn = "ou=" + rDn
 	newSup :=  Dmap.Multiple[deptID]["pdn"]
