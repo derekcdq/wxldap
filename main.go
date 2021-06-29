@@ -59,12 +59,11 @@ func main() {
 		for {
 			model.InitDmap()
 			model.SyncAllDept()
-			time.Sleep(time.Duration(30) * time.Second)
+			time.Sleep(time.Duration(300) * time.Second)
 		}
 	}()
 	//CALLBACK监听
 	for {
-		time.Sleep(10 * time.Second)
 		http.HandleFunc("/", model.IndexHandler)
 		http.ListenAndServe("0.0.0.0:8888",nil)
 	}

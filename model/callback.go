@@ -15,6 +15,8 @@ type MsgContent struct {
 	CreateTime   uint32 `xml:"CreateTime"`
 	MsgType      string `xml:"MsgType"`
 	Content      string `xml:"Content"`
+	Id           int
+	Name         string
 	Msgid        string `xml:"MsgId"`
 	Agentid      uint32 `xml:"AgentId"`
 	ChangeType   string `xml:"ChangeType"`
@@ -36,12 +38,29 @@ func IndexHandler ( w http.ResponseWriter, r *http.Request) {
 	var m MsgContent
 	xml.Unmarshal(msg,&m)
 	changeType := m.ChangeType
-	logger.Info(m)
 	switch  changeType {
 	case "update_user":
 		fmt.Println("updateUserDept")
+	case "update_party":
+		fmt.Println("updateparty")
+		if m.Id != "" && m.Name != "" {
+			UpdateParty(m.Id,m.Name)
+		}
+	default:
+		fmt.Println("pass")
 	}
+
 }
+
+func UpdateParty (deptID int, rDn string) {
+	dn := Dmap.Multiple[deptID]["dn"] + "," + Dmap.Multiple[deptID]["pdn"]
+	rDn = "ou=" + rDn
+	newSup :=  Dmap.Multiple[deptID]["pdn"]
+	d := new(DeptInfo)
+	d.ChangeDn(dn,rDn,newSup)
+	logger.Info("部门名称变更成功，新名称为:",d.DN)
+}
+
 
 
 

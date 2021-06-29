@@ -24,9 +24,9 @@ type DeptInfo struct {
 }
 
 type DeptsMap struct  {
-	SimpleMap   map[int]string
-	MultipleMap map[int]map[string]string
+	Multiple map[int]map[string]string
 }
+
 
 var Dmap DeptsMap
 
@@ -38,33 +38,41 @@ func ( t *DeptsMap ) Init () interface{} {
 	if err != nil {
 		logger.Info(err)
 	}
-	s := make(map[int]string)
-	for _ , v := range d.Department {
-		s[v.ID] = v.Name
-	}
 	m := make(map[int]map[string]string)
-	for _, v := range d.Department {
-		var (
-			myDN string
-			parentDN string
-		)
-		myDN = "ou=" + v.Name
-		if v.ParentID <= 1 {
-			parentDN = ldapConfig.BaseDn
-		} else {
-			parentName := s[v.ID]
-			parentDN = "ou=" + parentName + "," + ldapConfig.BaseDn
-		}
+	for _ , v := range d.Department {
 		m[v.ID] = make(map[string]string)
-		m[v.ID]["mydn"]  = myDN
-		m[v.ID]["parentdn"] = parentDN
+		m[v.ID]["name"] = v.Name
 		m[v.ID]["parentid"] = strconv.Itoa(v.ParentID)
-		m[v.ID]["parentname"] = s[v.ParentID]
 	}
-	t.SimpleMap = s
-	t.MultipleMap = m
+	for _ , v := range d.Department {
+		id := v.ID
+		name := v.Name
+		dn := "ou=" + name
+		var pdn string
+		for i := 1;i <= 5; i++ {
+			parentId := m[id]["parentid"]
+			if parentId != "" && parentId != "0" && parentId != "1" {
+				pID, _ := strconv.Atoi(parentId)
+				if ( i == 1 ) {
+					pdn = pdn + "ou=" + m[pID]["name"]
+				} else {
+					pdn = pdn + ",ou=" + m[pID]["name"]
+				}
+				id, _ = strconv.Atoi(parentId)
+			}
+		}
+		if v.ParentID > 1 {
+			pdn = pdn + "," + ldapConfig.BaseDn
+		} else {
+			pdn = ldapConfig.BaseDn
+		}
+		m[v.ID]["dn"] = dn
+		m[v.ID]["pdn"] = pdn
+	}
+	t.Multiple = m
 	return t
 }
+
 
 func (t *DeptList ) Get () interface{} {
 	var departments []DeptInfo
@@ -75,32 +83,12 @@ func (t *DeptList ) Get () interface{} {
 		logger.Info(err)
 	}
 	for _, v := range t.Department {
-		var pdn string
 		d := DeptInfo{}
-		id := v.ID
-		name := v.Name
-		dn := "ou=" + name
-		//循环5次组合DN，支持LDAP里面5层结构
-		for i := 1;i <= 5; i++ {
-			parentid := Dmap.MultipleMap[id]["parentid"]
-			if parentid != "" && parentid != "0" && parentid != "1" {
-				parentname := Dmap.MultipleMap[id]["parentname"]
-				dn = dn + ",ou=" + parentname
-				if ( i == 1 ) {
-					pdn = pdn + "ou=" + parentname
-				} else {
-					pdn = pdn + ",ou=" + parentname
-				}
-				id,_ = strconv.Atoi(parentid)
-			}
-		}
-		dn = dn + "," + ldapConfig.BaseDn
-		pdn = pdn + "," + ldapConfig.BaseDn
 		d.ID = v.ID
 		d.Name = v.Name
-		d.DN = dn
+		d.DN = Dmap.Multiple[v.ID]["dn"]
 		d.ParentID = v.ParentID
-		d.ParentDN = pdn
+		d.ParentDN = Dmap.Multiple[v.ID]["pdn"]
 		departments = append(departments,d)
 	}
 	t.Department =  departments
@@ -133,22 +121,21 @@ func ( t *DeptInfo ) AddToLdap ( deptName string ,dn string ) interface{} {
 	return t
 }
 
-func ( t *DeptInfo ) ChangeDn ( oldDn string, newDn string ) interface{} {
-	req := ldap.NewModifyDNRequest(oldDn, newDn,true , "" )
+func ( t *DeptInfo ) ChangeDn ( dn string, rdn string,newSup string  ) interface{} {
+	req := ldap.NewModifyDNRequest(dn, rdn,true , newSup )
 	err := ldapConn.ModifyDN(req)
 	if err != nil {
 		fmt.Println(err)
 		return t
 	}
-	t.DN = newDn
+	t.DN = rdn + "," + newSup
 	return t
 }
 
 func InitDmap () {
 	d := new (DeptsMap )
 	d.Init()
-	Dmap.SimpleMap = d.SimpleMap
-	Dmap.MultipleMap = d.MultipleMap
+	Dmap.Multiple = d.Multiple
 }
 
 
@@ -164,7 +151,7 @@ func SyncAllDept () {
 		//logger.Info("当前dn",v.DN)
 		//logger.Info("上级dn",v.ParentDN)
 		d := DeptInfo{}
-		d.AddToLdap(v.Name, v.DN)
+		d.AddToLdap(v.Name, v.DN + "," + v.ParentDN )
 		u := new (UserList)
 		u.Get(v.ID)
 		SyncAllUser(u.Userlist,v.DN)
