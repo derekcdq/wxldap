@@ -23,7 +23,7 @@ type NotifyMsg struct {
 }
 
 func ( t *NotifyMail ) GetContent ( userID string, userName string ) interface{} {
-	template, err := ioutil.ReadFile("templates/ldapMail.tpl")
+	template, err := ioutil.ReadFile("../templates/ldapMail.tpl")
 	content := string(template)
 	content = strings.Replace(content, "{name}", userName, -1)
 	content = strings.Replace(content, "{userid}", userID, -1)
