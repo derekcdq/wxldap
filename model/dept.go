@@ -154,6 +154,6 @@ func SyncAllDept () {
 		d.AddToLdap(v.Name, v.DN + "," + v.ParentDN )
 		u := new (UserList)
 		u.Get(v.ID)
-		SyncAllUser(u.Userlist,v.DN)
+		SyncAllUser(u.Userlist,v.DN + "," + v.ParentDN)
 	}
 }
