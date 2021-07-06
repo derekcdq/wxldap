@@ -57,7 +57,7 @@ func UpdateParty (deptID int, rDn string) {
 	rDn = "ou=" + rDn
 	newSup :=  Dmap.Multiple[deptID]["pdn"]
 	d := new(DeptInfo)
-	d.ChangeDn(dn,rDn,newSup)
+	d.ModifyDn(dn,rDn,newSup)
 	logger.Info("部门名称变更成功，新名称为:",d.DN)
 	InitDmap()
 }

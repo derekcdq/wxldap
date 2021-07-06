@@ -121,7 +121,7 @@ func ( t *DeptInfo ) AddToLdap ( deptName string ,dn string ) interface{} {
 	return t
 }
 
-func ( t *DeptInfo ) ChangeDn ( dn string, rdn string,newSup string  ) interface{} {
+func ( t *DeptInfo ) ModifyDn ( dn string, rdn string,newSup string  ) interface{} {
 	req := ldap.NewModifyDNRequest(dn, rdn,true , newSup )
 	err := ldapConn.ModifyDN(req)
 	if err != nil {
