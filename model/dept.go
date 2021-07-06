@@ -23,9 +23,11 @@ type DeptInfo struct {
 	LdapExist int
 }
 
-type DeptsMap struct  {
-	Multiple map[int]map[string]string
-}
+//type DeptsMap struct  {
+//	Multiple map[int]map[string]string
+//}
+
+type DeptsMap map[int]map[string]string
 
 
 var Dmap DeptsMap
@@ -69,7 +71,7 @@ func ( t *DeptsMap ) Init () interface{} {
 		m[v.ID]["dn"] = dn
 		m[v.ID]["pdn"] = pdn
 	}
-	t.Multiple = m
+	*t = m
 	return t
 }
 
@@ -86,9 +88,9 @@ func (t *DeptList ) Get () interface{} {
 		d := DeptInfo{}
 		d.ID = v.ID
 		d.Name = v.Name
-		d.DN = Dmap.Multiple[v.ID]["dn"]
+		d.DN = Dmap[v.ID]["dn"]
 		d.ParentID = v.ParentID
-		d.ParentDN = Dmap.Multiple[v.ID]["pdn"]
+		d.ParentDN = Dmap[v.ID]["pdn"]
 		departments = append(departments,d)
 	}
 	t.Department =  departments
@@ -135,7 +137,7 @@ func ( t *DeptInfo ) ModifyDn ( dn string, rdn string,newSup string  ) interface
 func InitDmap () {
 	d := new (DeptsMap )
 	d.Init()
-	Dmap.Multiple = d.Multiple
+	Dmap = *d
 }
 
 
