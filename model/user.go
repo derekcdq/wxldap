@@ -26,28 +26,25 @@ type UserInfo struct {
 	UidNumber       string
 }
 
-func ( t *UserList) Read ( body []byte ) interface{} {
-	err := json.Unmarshal(body, t)
-	if err != nil {
-		logger.Info(err)
-	}
-	return t
-}
 
 func ( t *UserList ) Get (deptID int) []UserInfo {
 	method := "user/list?access_token=" + AccessToken + "&department_id=" + strconv.Itoa(deptID) + "&fetch_child=0"
-	body := CallWechatApi(method)
-	t.Read(body)
-	return t.Userlist
-}
-
-func  ( t *UserInfo ) Read ( body []byte ) interface{} {
+	var w WechatAPI
+	body := w.Get(method)
 	err := json.Unmarshal(body, t)
 	if err != nil {
 		logger.Info(err)
 	}
-	return t
+	return t.Userlist
 }
+
+//func  ( t *UserInfo ) Read ( body []byte ) interface{} {
+//	err := json.Unmarshal(body, t)
+//	if err != nil {
+//		logger.Info(err)
+//	}
+//	return t
+//}
 
 func ( t *UserInfo ) CheckExist ( userID string ) interface{} {
 	filter := "(&(" + "uid=" + userID + "))"

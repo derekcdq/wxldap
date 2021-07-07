@@ -22,9 +22,12 @@ type MsgContent struct {
 	ChangeType   string `xml:"ChangeType"`
 }
 
-
 func IndexHandler ( w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
+	err := r.ParseForm()
+	if err != nil {
+		logger.Info(err)
+		return
+	}
 	wxcpt := wxbizmsgcrypt.NewWXBizMsgCrypt(callbackConfig.Token, callbackConfig.EncodingAeskey, callbackConfig.ReceiverId, wxbizmsgcrypt.XmlType)
 	msgSignature := r.Form.Get("msg_signature")
 	timestamp := r.Form.Get("timestamp")
@@ -36,20 +39,22 @@ func IndexHandler ( w http.ResponseWriter, r *http.Request) {
 		fmt.Println(cryptErr)
 	}
 	var m MsgContent
-	xml.Unmarshal(msg,&m)
+	err = xml.Unmarshal(msg,&m)
+	if err != nil {
+		logger.Info(err)
+	}
 	changeType := m.ChangeType
 	switch  changeType {
 	case "update_user":
 		fmt.Println("updateUserDept")
 	case "update_party":
-		fmt.Println("updateparty")
+		fmt.Println("收到部门变更信息")
 		if  m.Name != "" {
 			UpdateParty(m.Id,m.Name)
 		}
 	default:
 		fmt.Println("pass")
 	}
-
 }
 
 func UpdateParty (deptID int, rDn string) {

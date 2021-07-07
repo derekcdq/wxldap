@@ -8,7 +8,20 @@ import (
 	"time"
 )
 
-func CallWechatApi (method string) []byte {
+type WechatAPI struct {
+	ErrorCode int
+	ErrMsg string
+}
+
+func (w WechatAPI) Post(method string, msgText string) {
+	url := wxConfig.ApiUrl + method
+	_, err := http.Post(url,"application/x-www-form-urlencoded",strings.NewReader(msgText))
+	if err != nil {
+		logger.Info(err)
+	}
+}
+
+func (w WechatAPI) Get(method string) []byte {
 	url := wxConfig.ApiUrl + method
 	var resp *http.Response
 	var body []byte
@@ -30,12 +43,3 @@ func CallWechatApi (method string) []byte {
 		}
 	return body
 }
-
-func CallWechatApiPost ( method string, msgText string ) {
-	url := wxConfig.ApiUrl + method
-	_, err := http.Post(url,"application/x-www-form-urlencoded",strings.NewReader(msgText))
-	if err != nil {
-		logger.Info(err)
-	}
-}
-

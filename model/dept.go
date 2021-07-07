@@ -29,12 +29,12 @@ type DeptInfo struct {
 
 type DeptsMap map[int]map[string]string
 
-
 var Dmap DeptsMap
 
 func ( t *DeptsMap ) Init () interface{} {
 	method := "department/list?access_token=" + AccessToken
-	body := CallWechatApi(method)
+	var w WechatAPI
+	body := w.Get(method)
 	d := new(DeptList)
 	err := json.Unmarshal(body, d)
 	if err != nil {
@@ -75,11 +75,11 @@ func ( t *DeptsMap ) Init () interface{} {
 	return t
 }
 
-
 func (t *DeptList ) Get () interface{} {
 	var departments []DeptInfo
 	method := "department/list?access_token=" + AccessToken
-	body := CallWechatApi(method)
+	var w WechatAPI
+	body := w.Get(method)
 	err := json.Unmarshal(body, t)
 	if err != nil {
 		logger.Info(err)

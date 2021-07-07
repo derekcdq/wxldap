@@ -62,7 +62,8 @@ func ( t *NotifyMsg ) Send ( userID string ) interface{} {
 	msgText = strings.Replace(msgText, "{msgContent}", msgContent, -1)
 	t.UserID = userID
 	t.MsgText = msgText
-	CallWechatApiPost(method, msgText)
+	var w WechatAPI
+	w.Post(method, msgText)
 	return t
 }
 

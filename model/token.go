@@ -15,24 +15,19 @@ type WechatToken struct {
 
 var AccessToken string
 
-func (t *WechatToken ) Read (body []byte ) interface{} {
-	var err error
-	err = json.Unmarshal(body, t)
+func ( t *WechatToken ) Init () {
+	method := "gettoken?corpid=" + wxConfig.CorpID + "&corpsecret=" + wxConfig.CorpSecret
+	var w WechatAPI
+	body := w.Get(method)
+	err := json.Unmarshal(body, t)
 	if err != nil {
 		logger.Info(err)
 	}
-	return t
-}
-
-func (t *WechatToken) Init () {
-	method := "gettoken?corpid=" + wxConfig.CorpID + "&corpsecret=" + wxConfig.CorpSecret
-	body := CallWechatApi(method)
-	t.Read(body)
 	if t.ErrCode == 0 {
 		AccessToken = t.AccessToken
 		logger.Info("企业微信Token初始化状态：OK",AccessToken)
 	} else {
 		logger.Info(t.ErrMsg)
 	}
-
+	return
 }

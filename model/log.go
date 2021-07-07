@@ -7,5 +7,8 @@ import (
 func InitLogConfig () {
 	configFile := new(ConfigFile)
 	configFile.Init("log.json","conf")
-	logger.SetLogger(configFile.FilePath)
+	err := logger.SetLogger(configFile.FilePath)
+	if err != nil {
+		logger.Info(err)
+	}
 }
