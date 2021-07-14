@@ -27,6 +27,7 @@ func ( t *NotifyMail ) GetContent ( userID string, userName string ) interface{}
 	content := string(template)
 	content = strings.Replace(content, "{name}", userName, -1)
 	content = strings.Replace(content, "{userid}", userID, -1)
+	content = strings.Replace(content, "{defaultPassword}", ldapConfig.DefaultPassword, -1)
 	if err != nil {
 		logger.Info(err)
 	}
