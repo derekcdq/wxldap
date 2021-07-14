@@ -9,6 +9,7 @@ ldap.json
 {
   "ldapConfig": {
       "ldapHost": "172.20.11.7:389",
+      "baseDn" : "dc=eclincloud,dc=net",
       "rootDn" : "cn=root,dc=example,dc=net",
       "password" : "ldap的管理密码",
       "defaultPassword": "新ldap用户的初始密码"
