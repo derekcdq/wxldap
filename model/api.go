@@ -39,7 +39,8 @@ func (w WechatAPI) Get(method string) []byte {
 				logger.Info(err)
 			}
 			logger.Info(err)
-			time.Sleep( 1 * time.Second)
+			time.Sleep( 5 * time.Second)
 		}
+	defer resp.Body.Close()
 	return body
 }
