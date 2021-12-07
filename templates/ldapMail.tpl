@@ -1,5 +1,5 @@
 尊敬的: {name}
-    您在易临云（深圳）科技有限公司的LDAP账号已经开通，账号信息如下：
+    您在XXX（深圳）科技有限公司的LDAP账号已经开通，账号信息如下：
     用户名： {userid}
     初始密码：{defaultPassword}
 
@@ -9,11 +9,11 @@
 
     使用LDAP账号，您可以登陆以下内部系统：
     1、WIKI文档管理系统
-       http://wiki.eclincloud.net
+       http://wiki.example.net
 
     2、Git代码管理系统（仅限开发）
-       深圳 http://git-sz.eclincloud.net
-       成都 http://git-cd.eclincloud.net
+       深圳 http://git-sz.example.net
+       成都 http://git-cd.example.net
 
     3、Jenkins项目构建发布系统（仅限运维）
        
