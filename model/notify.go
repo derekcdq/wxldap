@@ -56,7 +56,7 @@ func ( t *NotifyMail ) Send ( userID string, userName string ,userEmail string  
 
 func ( t *NotifyMsg ) Send ( userID string ) interface{} {
 	method := "message/send?access_token="+ AccessToken
-	msgContent := "您在易临云的LDAP账号已经自动开通\n账号:"+userID+" \n初始密码:ecc123456 \n为了账号安全,请即时登陆http://password.eclincloud.net修改密码"
+	msgContent := "您在的LDAP账号已经自动开通\n账号:"+userID+" \n初始密码:123456 \n为了账号安全,请即时登陆http://password.test.net修改密码"
 	body, _ := ioutil.ReadFile("templates/ldapMsg.tpl")
 	msgText := string(body)
 	msgText = strings.Replace(msgText, "{userId}", userID, -1)
