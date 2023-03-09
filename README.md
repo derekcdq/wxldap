@@ -1,11 +1,10 @@
 # wxldap
-同步企业微信的组织架构和人员到OPENLDAP
+## 同步企业微信的组织架构和人员到OPENLDAP
 
 
-配置文件在conf目录下
-ldap.json
-修改以下信息，改为你的LDAP的信息
-
+## 配置文件在conf目录下 
+### ldap.json 
+```
 {
   "ldapConfig": {
       "ldapHost": "172.20.11.7:389",
@@ -15,10 +14,10 @@ ldap.json
       "defaultPassword": "新ldap用户的初始密码"
   }
 }
-
-smtp.json
+```
+### smtp.json
 修改以下信息，主要用于通知邮件的发送
-
+```
 {
   "smtpConfig" : {
     "mailHost": "smtp.exmail.qq.com",
@@ -26,10 +25,11 @@ smtp.json
     "mailPasswd" : "邮箱密码"
   }
 }
-
-wechat.json
+```
+### wechat.json
 修改以下信息，改为你自己在企业微信开放平台的ID和Secret
 
+```
 {
   "wechatConfig": {
     "apiUrl": "https://qyapi.weixin.qq.com/cgi-bin/",
@@ -38,7 +38,9 @@ wechat.json
     "interval": 30
   }
 }
+```
 
-运行程序：
-
+##运行程序：
+```
 go run main.go
+```
